@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.List;
+
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 class ItemRepositoryTest {
@@ -41,6 +43,46 @@ class ItemRepositoryTest {
             item.setItemSellStatus(ItemSellStatus.SELL);
             item.setStockNumber(100);
             Item savedItem = itemRepository.save(item);
+        }
+    }
+
+    @Test
+    @DisplayName("상품명 조회 테스트")
+    public void findByItemNmTest(){
+        this.createItemList();
+        List<Item> itemList = itemRepository.findByItemNm("테스트 상품1");
+        for(Item item : itemList){
+            System.out.println(item.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("상품명, 상품상세설명 or 테스트")
+    public void findByItemNmOrItemDetailTest(){
+        this.createItemList();
+        List<Item> itemList = itemRepository.findByItemNmOrItemDetail("테스트 상품1", "테스트 상품 상세 설명5");
+        for(Item item : itemList){
+            System.out.println(item.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("가격 LessThan 테스트")
+    public void findByPriceLessThanTest(){
+        this.createItemList();
+        List<Item> itemList = itemRepository.findByPriceLessThan(10005);
+        for(Item item : itemList){
+            System.out.println(item.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("가격 내림차순 조회 테스트")
+    public void findByPriceLessThanOrderByPriceDesc(){
+        this.createItemList();
+        List<Item> itemList = itemRepository.findByPriceLessThanOrderByPriceDesc(10005);
+        for(Item item : itemList){
+            System.out.println(item.toString());
         }
     }
 }
