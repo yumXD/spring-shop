@@ -34,6 +34,21 @@ public class SecurityConfig {
                                 .logoutSuccessUrl("/")
                 )
         ;
+        http
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/css/**", "/js/**", "/img/**", "/", "/members/**", "/item/**", "/images/**").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
+                )
+        ;
+
+        http
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                )
+        ;
         return http.build();
     }
 
