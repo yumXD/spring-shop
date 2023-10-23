@@ -1,6 +1,7 @@
 package com.shop.config;
 
-import com.shop.service.MemberService;
+import com.shop.service.MemberDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +14,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 
     @Autowired
-    MemberService memberService;
+    MemberDetailsService memberDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        log.info("스프링시큐리티 설정 로드...");
         http
                 .formLogin(formLogin ->
                         formLogin

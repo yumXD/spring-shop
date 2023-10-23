@@ -16,11 +16,15 @@
   <!-- 사용자 스크립트 추가 -->
   <th:block layout:fragment="script">
     <script th:inline="javascript">
-      $(document).ready(function(){
-          var errorMessage = [[${errorMessage}]];
-          if(errorMessage != null){
-              alert(errorMessage);
-          }
+      $(document).ready(function () {
+        var errorMessage = /*[[${errorMessage}]]*/ null;
+        if (errorMessage) {
+          alert(errorMessage);
+        }
+        var successMessage = /*[[${successMessage}]]*/ null;
+        if (successMessage) {
+          alert(successMessage);
+        }
       });
     </script>
   </th:block>
