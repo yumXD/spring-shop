@@ -4,7 +4,15 @@
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
   <div th:fragment="header">
-    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <style>
+      .bg-custom {
+        background-color: #f5cfb5; /* 원하는 색상 코드로 변경하세요 */
+      }
+      .navbar-light .navbar-nav .nav-link {
+        color: #000000; /* 텍스트 색상을 검은색으로 설정 */
+      }
+    </style>
+    <nav class="navbar navbar-expand-sm bg-custom navbar-light">
       <button
         class="navbar-toggler"
         type="button"

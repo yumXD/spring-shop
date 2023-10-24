@@ -8,6 +8,14 @@
   <th:block layout:fragment="script">
     <script th:inline="javascript">
       $(document).ready(function () {
+        var errorMessage = /*[[${errorMessage}]]*/ null;
+        if (errorMessage) {
+          alert(errorMessage);
+        }
+        var successMessage = /*[[${successMessage}]]*/ null;
+        if (successMessage) {
+          alert(successMessage);
+        }
         $("#searchBtn").on("click", function (e) {
           e.preventDefault();
           page(0);
