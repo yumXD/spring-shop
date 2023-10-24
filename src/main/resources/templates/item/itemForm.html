@@ -35,6 +35,34 @@
           $(this).siblings(".custom-file-label").html(fileName);
         });
       }
+
+      document
+        .getElementById("deleteButton")
+        .addEventListener("click", function () {
+          const itemId = document.getElementById("itemId").value; // 숨겨진 input 필드에서 아이템 ID 추출
+          deleteItem(itemId);
+        });
+
+      function deleteItem(itemId) {
+        if (confirm("삭제하겠습니까?")) {
+          fetch(`/api/admin/item/${itemId}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (response.ok) {
+                // 삭제 성공 시 처리
+                alert("상품이 삭제되었습니다.");
+                location.replace(`/admin/items`);
+              } else {
+                // 삭제 실패 시 처리
+                throw new Error("삭제 중 오류가 발생했습니다.");
+              }
+            })
+            .catch((error) => {
+              alert(error);
+            });
+        }
+      }
     </script>
   </th:block>
 
@@ -62,7 +90,7 @@
     >
       <p class="h2">상품 등록</p>
 
-      <input type="hidden" th:field="*{id}" />
+      <input type="hidden" id="itemId" th:field="*{id}" />
 
       <div class="form-group">
         <select th:field="*{itemSellStatus}" class="custom-select">
@@ -200,6 +228,9 @@
           class="btn btn-primary"
         >
           수정
+        </button>
+        <button type="button" id="deleteButton" class="btn btn-danger">
+          삭제하기
         </button>
       </div>
       <input

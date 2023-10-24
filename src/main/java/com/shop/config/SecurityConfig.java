@@ -40,10 +40,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/css/**", "/js/**", "/img/**", "/", "/members/**", "/item/**", "/images/**").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/error").permitAll()
+                                .requestMatchers("/", "/members/**", "/item/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
-                )
+                ).csrf(csrf -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**"))) // restful은 csrf 예외 허용
         ;
 
         http
