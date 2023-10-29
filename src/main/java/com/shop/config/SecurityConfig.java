@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,6 +25,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("스프링시큐리티 설정 로드...");
         http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**"))) // restful은 csrf 예외 허용
+                .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/members/login")
@@ -40,12 +44,21 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/error").permitAll()
-                                .requestMatchers("/", "/members/**", "/item/**").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/css/**"),
+                                        new AntPathRequestMatcher("/js/**"),
+                                        new AntPathRequestMatcher("/img/**"),
+                                        new AntPathRequestMatcher("/images/**"),
+                                        new AntPathRequestMatcher("/error")).permitAll()
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/"),
+                                        new AntPathRequestMatcher("/members/**"),
+                                        new AntPathRequestMatcher("/item/**")).permitAll()
+                                .requestMatchers(
+                                        new AntPathRequestMatcher("/admin/**")
+                                ).hasRole("ADMIN")
                                 .anyRequest().authenticated()
-                ).csrf(csrf -> csrf
-                        .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**"))) // restful은 csrf 예외 허용
+                )
         ;
 
         http
